@@ -1,7 +1,7 @@
 iscrizione-jquery-jqueryvalidate
 ================================
 
-semplice sistema di iscrizione con  jquery, jquery validate, php e mysql:
+sistema di iscrizione con  jquery, jquery validate, php e mysql:
 
 permette di inserire nome, cognome, usermane, email, numero di telefono.
 
