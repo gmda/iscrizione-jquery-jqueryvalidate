@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="Iscrizione e validazione con php, mysql e jquery validation" />
+    <meta name="keywords" content="iscrizione, php, mysql, jquery validation, validazione form, validazione jquery, controllo form jquery" />
+    <meta name="author" content="gmda" />
+    <title>Iscrizione con php e jQuery validation - by gmda</title>
+
+
+<!-- JS -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+
+
+<!-- CSS -->
+<style>
+body {
+	color:#000;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	
+}
+
+.contenitore{
+	width:800px;
+	border:hidden;
+	margin:0 auto;
+	padding-top:50px;
+	padding-left:10px;
+}
+
+input[type="text"] {
+	width:150px;
+	background-color:#faffff;
+}
+
+input[type="button"] {
+	width:120px;
+	margin-left:10px;
+}
+
+
+.campo{
+	width:550px;
+}
+	
+</style>
+</head>
+
+<body>
+<div class="contenitore">
+	<form method="post" action="php.php" name="formIscrizione" id="formIscrizione">
+	    <label for="testo">nome:</label>
+        <div class="campo"><input type="text" id="nome" name="nome" /></div>
+        <br />
+    	<label for="testo">cognome:</label>
+        <div class="campo"><input type="text" id="cognome" name="cognome" /></div>
+		<label for="testo">user:</label>
+        <div class="campo"><input type="text" id="user" name="user" /></div>
+        <br />
+		<label for="testo">password :</label>
+		<div class="campo"><input type="text" id="password" name="password" /></div>
+        <br />
+		<label for="testo">riscrivi la password:</label>
+		<div class="campo"><input type="text" id="repassword" name="repassword" /></div>
+        <br />
+        <label for="email">Indirizzo email:</label>
+        <div class="campo"><input type="text" id="email" name="email" /></div>
+        <br />
+        <label for="email2">Indirizzo email da ripetere:</label>
+        <div class="campo"><input type="text" id="email2" name="email2" /></div>
+        <br />
+        <label for="numero">Solo numero:</label>
+        <div class="campo"><input type="text" id="numero" name="numero" /></div>
+        <br />
+		<label for="numero">Leggi il <a href="regolamentoprivacy.php">regolamento e la privacy</a> :</label>
+        <div class="campo">conferma la lettura: <input type="checkbox" class="checkbox" id="agree" name="agree" /></div>
+        <br />
+        <input type="submit" value="Iscrizione!" name="iscrizione" />
+    </form>
+    <br /><br />
+    
+</div>
+<script>
+
+	jQuery.validator.setDefaults({
+	  debug: true,
+	  success: "valid"
+	});
+	
+	$.validator.addMethod("filtronome",
+           function(value, element) {
+                   return /^[A-Za-z ]+$/.test(value);
+           },
+   "<font color=#ff0000>&nbsp;SOLO LETTERE</font>"
+   );
+   
+   $.validator.addMethod("filtrocognome",
+           function(value, element) {
+                   return /^[A-Za-z']+$/.test(value);
+           },
+   "<font color=#ff0000>&nbsp;SOLO LETTERE E APICE</font>"
+   );
+   
+   $.validator.addMethod("filtrouser",
+           function(value, element) {
+                   return /^[a-zA-Z0-9]+$/.test(value);
+           },
+   "<font color=#ff0000>&nbsp;SOLO LETTERE E NUMERI</font>"
+   );
+   
+   $.validator.addMethod("filtroemail",
+           function(value, element) {
+                   return /^[a-zA-Z0-9@.]+$/.test(value);
+           },
+   "<font color=#ff0000>&nbsp;SOLO LETTERE, NUMERI o @ .</font>"
+   );
+   
+	$( "#formIscrizione" ).validate({
+   
+		rules: {
+		    nome: {
+				required: true,	
+				filtronome: true,
+				minlength: 2,
+				maxlength: 25
+			},
+			
+			cognome: {
+				required: true,	
+				filtrocognome: true,
+				minlength: 2,
+				maxlength: 25
+			},
+			
+			user: {
+				required: true,	
+				filtrouser: true,
+				minlength: 2,
+				maxlength: 25,
+				remote: "php.php"
+			},
+			
+			password: {
+				required: true,	
+				minlength: 8,
+                maxlength: 25				
+			},
+			
+			repassword: {
+				required: true,				
+				equalTo: "#password"
+			},
+			
+			email: {
+		  		required: true,
+				filtroemail: true,
+				email: true,
+				maxlength: 255,
+				remote: "php.php"
+			},
+			
+			email2: {
+				required: true,
+				email: true, 
+				equalTo: "#email"
+			},
+			
+			numero: {
+				required: true,
+				maxlength: 15,
+				number: true
+			},
+			agree: "required"
+	  	},
+	  	messages: {
+			
+			nome: { 
+			   required:"<font color=#ff0000>&nbsp;CAMPO OBBLIGATORIO</font>",
+			   minlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MINIMA 2 CARATTERI</font>",
+			   maxlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MASSIMA 25 CARATTERI</font>",
+			},
+			
+			cognome: { 
+			   required:"<font color=#ff0000>&nbsp;CAMPO OBBLIGATORIO</font>",
+			   minlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MINIMA 2 CARATTERI</font>",
+			   maxlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MASSIMA 25 CARATTERI</font>",
+			},
+			
+			user: { 
+			   required:"<font color=#ff0000>&nbsp;CAMPO OBBLIGATORIO</font>",
+			   minlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MINIMA 2 CARATTERI</font>",
+			   maxlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MASSIMA 25 CARATTERI</font>",
+			   remote:"<font color=#ff0000>&nbsp;USER UTILIZZATO INSERIRNE UN'ALTRO</font>",
+			},
+			
+			password: { 
+			   required:"<font color=#ff0000>&nbsp;CAMPO OBBLIGATORIO</font>",
+			   minlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MINIMA 8 CARATTERI</font>",
+	           maxlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MASSIMA 25 CARATTERI</font>",
+			},
+			
+			repassword: { 
+			    required:"<font color=#ff0000>&nbsp;CAMPO OBBLIGATORIO</font>",
+			    equalTo: "<font color=#ff0000>&nbsp;PASSWORD NON UGUALE ALLA PRECEDENTE</font>",
+				
+			},
+			
+			email: {
+				required: "<font color=#ff0000>&nbsp;EMAIL OBBLIGATORIA</font>",
+				maxlength:"<font color=#ff0000>&nbsp;LUNGHEZZA MASSIMA 25 CARATTERI</font>",
+				email: "<font color=#ff0000>&nbsp;INDIRIZZO EMAIL NON VALIDO</font>",
+				remote: "<font color=#ff0000>&nbsp;EMAIL UTILIZZATA</font>",
+			},
+			
+			email2: {
+				required: "<font color=#ff0000>&nbsp;EMAIL OBBLIGATORIA</font>",
+				equalTo: "<font color=#ff0000>&nbsp;EMAIL NON UGUALE ALLA PRECEDENTE</font>",
+				email: "<font color=#ff0000>&nbsp;INDIRIZZO EMAIL NON VALIDO</font>",
+			},
+			
+			agree: "<font color=#ff0000>&nbsp;CONFERMA LA PRESA DI VISIONE</font>",
+			numero: "<font color=#ff0000>&nbsp;INSERIRE SOLO NUMERI</font>",
+	  },
+	  
+	  
+	submitHandler: function(form) {
+	form.submit();
+	}
+	});
+	
+</script> 
+</body>
+</html>
